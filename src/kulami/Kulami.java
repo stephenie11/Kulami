@@ -8,6 +8,7 @@ package kulami;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.InetAddress;
 import java.util.Scanner;
 
 /**
@@ -389,15 +390,34 @@ public class Kulami {
         
     }
     
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, InterruptedException {
         
         ResourceSingleton r = ResourceSingleton.getInstance();
-        System.out.println(r.getSpot(1,2));
-        r.getSpot(1, 2).setStatus(1);
-        
-        ResourceSingleton r1 = ResourceSingleton.getInstance();
-        System.out.println(r1.getSpot(1,2));
-        
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please select option : 1-server , 2 - client");
+        int option = sc.nextInt();
+       InetAddress ip;
+       ServerMode serverThread;
+       ClientMode clientThread;
+       Thread t;
+        if(option == 1) { 
+            serverThread = new ServerMode();
+            t = new Thread(serverThread,"Server");
+            t.start();
+            
+        }else
+        {
+            clientThread = new ClientMode();
+            t = new Thread(clientThread,"Client");
+            t.start();
+        }
+        t.join();
+//        System.out.println(r.getSpot(1,2));
+//        r.getSpot(1, 2).setStatus(1);
+//        
+//        ResourceSingleton r1 = ResourceSingleton.getInstance();
+//        System.out.println(r1.getSpot(1,2));
+//        
         
 //        initGame();
 //        showBoard();
