@@ -5,7 +5,7 @@
  */
 package kulami;
 
-import java.awt.Point;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -150,6 +150,11 @@ public final class ResourceSingleton {
 
     public void setMarbles(int marbles) {
         this.marbles = marbles;
+    }
+
+    @Override
+    public String toString() {
+        return "ResourceSingleton{" + "panels=" + panels + ", spots=" + spots + ", MATRIXLENGTH=" + MATRIXLENGTH + ", PANELSNR=" + PANELSNR + ", client=" + client + ", server=" + server + ", lastMove1=" + lastMove1 + ", lastMove2=" + lastMove2 + ", marbles=" + marbles + '}';
     }
     
 }

@@ -16,7 +16,7 @@ public class Point implements Serializable{
     private int y;
     
     Point() {
-        
+        x = y = -1;
     }
     
     Point(int x,int y) {

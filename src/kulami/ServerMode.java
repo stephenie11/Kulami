@@ -24,10 +24,12 @@ public class ServerMode implements Runnable {
     private ResourceSingleton resources;
     private int portNumber;
     private InetAddress ipAddress;
-    private Object clientSocket;
+    private Socket clientSocket;
     private ServerSocket serverSocket;
-
-    public ServerMode() {
+    private final int PANELSNR = 17;
+    private final int MATRIXLENGTH = 8;
+    public ServerMode(ResourceSingleton resources) {
+        this.resources = resources;
     }
     
     ServerMode(ResourceSingleton resources, InetAddress ipAddress,int portNumber) {
@@ -36,8 +38,41 @@ public class ServerMode implements Runnable {
         this.portNumber = portNumber;
         //new Thread(this,"Server").start();
     }
+    private int firstMoveServer(Point move) {
+        int x  = move.getX();
+        int y = move.getY();
+        // Verifica daca coordonatele locului transmis prin parametru se afla pe placa de joc
+        if( !(x >= 0 && x <= PANELSNR || y >= 0 && y <= PANELSNR)) return -1;
+        resources.getSpot(x, y).setStatus(1);
+        resources.setLastMove1(move);
+        resources.setMarbles((resources.getMarbles()-1));
+//        client = true;
+//        server = false;
+         return 1;
+        
+    }
     
-
+    // Afiseaza boardul
+    public void showBoard() {
+        for(int i = 0; i < MATRIXLENGTH; i++) {
+            for(int j = 0; j < MATRIXLENGTH; j++) {
+                System.out.print(resources.getSpot(i, j).getStatus() + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+     
+    }
+    
+    // inregistreaza schimbarile provenite de la prima mutare pe care o face openentul(clientul)
+    public void updateClientFirstMove(Point move) {
+        int x = move.getX();
+        int y = move.getY();
+        resources.getSpot(x, y).setStatus(2);
+        resources.setMarbles(resources.getMarbles() - 1);
+        resources.setLastMove2(move);
+    }
+    
     @Override
     public void run() {
 //          public ServerSocket(int port,int backlog,InetAddress bindAddr)
@@ -47,54 +82,72 @@ public class ServerMode implements Runnable {
 //          bindAddr - the local InetAddress the server will bind to
         
         try {
+            
+            Scanner scIn = new Scanner(System.in);
             //serverSocket  = new ServerSocket(portNumber,1,ipAddress);
             serverSocket  = new ServerSocket(8080);
-            Socket clientSocket = serverSocket.accept();
+            clientSocket = serverSocket.accept();
+            
             ObjectOutputStream out = 
                     new ObjectOutputStream(clientSocket.getOutputStream());
             ObjectInputStream in = 
                     new ObjectInputStream(clientSocket.getInputStream());
             
-            Scanner scIn = new Scanner(System.in);
-            Object userInput = null, receivedInput = null;
             
+            Point userInput = null;
+            Point receivedInput = null;
+            Point move  = new Point();
             
-            receivedInput = in.readObject();
-            while(!(serverSocket.isClosed()) && receivedInput != null) {
-              
-                System.out.println("Mesaj de la client " + receivedInput );
-                System.out.println("Mesaj pentru client |Intoduceti coordonatele  punctelor :");
-                Point p = new Point(scIn.nextInt(),scIn.nextInt());
-                out.writeObject(p);    
+            // Asteapta ca userul server sa introduca o locatie valida in care sa puna bila 
+            // Fiind prima miscare din joc , userul poate pune oriunde pe placa doar sa nu depaseasca limitele acesteia
+            while(firstMoveServer(move) == -1) {
+                System.out.println("Introduceti coordonatele primei miscari: ");
+                move.setLocation(scIn.nextInt(), scIn.nextInt());
+                firstMoveServer(move);
             }
-        }
-            catch(IOException e) {
-                if(serverSocket.isClosed()) {
-                    try {
-                        serverSocket.close();
-                    }
-                    catch(IOException e1) {
-                        e1.getMessage();
-                    }
-                }  
+
+            // Daca a ajuns aici inseamna ca s-a introdus prima miscare valida . Aceasta trebuie transmisa clientului
+            out.writeObject(move); // trimite miscarea facuta de server clientului
+            
+            // Aici urmeaza loopul cand userul asteapta sa primeasca raspunsul de la oponent-pozitia pe care acela a plasa bila
+            while(receivedInput == null) {
+                receivedInput = (Point)in.readObject();
             }
-            catch (ClassNotFoundException ex) {   
-                 Logger.getLogger(ServerMode.class.getName()).log(Level.SEVERE, null, ex);
-            } 
-        
-        try {
+            
+            // Daca ajunge aici inseamna ca a primit miscarea clientului(a doua miscare din joc)
+            // Functia aceasta inregistreaza miscarea facuta de adversar in resursa userului
+            updateClientFirstMove(receivedInput);
+            showBoard();
+            out.close();
+            in.close();
             serverSocket.close();
             
-        } catch (IOException ex) {
-            Logger.getLogger(ServerMode.class.getName()).log(Level.SEVERE, null, ex);
+//            while(userInput == null)
+//            receivedInput = in.readObject();
+//            while(!(serverSocket.isClosed()) && receivedInput != null) {
+//              
+//                System.out.println("Mesaj de la client " + receivedInput );
+//                System.out.println("Mesaj pentru client |Intoduceti coordonatele  punctelor :");
+//                Point p = new Point(scIn.nextInt(),scIn.nextInt());
+//                out.writeObject(p);    
+//            }
         }
-            System.out.println(serverSocket.isClosed());
-
-            System.out.println("Conexiunea cu clientul a fost inchisa");
-
-
-     
-        }    
-    }
+        catch(IOException e) {
+       
+            if(serverSocket.isClosed()) {
+                try {
+                    serverSocket.close();
+                }
+                catch(IOException e1) {
+                    e1.getMessage();
+                }
+            }  
+        }
+        catch (ClassNotFoundException ex) {   
+            Logger.getLogger(ServerMode.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        System.out.println("Conexiunea cu clientul a fost inchisa");
+    }    
+}
     
 

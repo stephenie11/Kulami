@@ -401,77 +401,17 @@ public class Kulami {
        ClientMode clientThread;
        Thread t;
         if(option == 1) { 
-            serverThread = new ServerMode();
+            serverThread = new ServerMode(r);
             t = new Thread(serverThread,"Server");
             t.start();
             
         }else
         {
-            clientThread = new ClientMode();
+            clientThread = new ClientMode(r);
             t = new Thread(clientThread,"Client");
             t.start();
         }
-        t.join();
-//        System.out.println(r.getSpot(1,2));
-//        r.getSpot(1, 2).setStatus(1);
-//        
-//        ResourceSingleton r1 = ResourceSingleton.getInstance();
-//        System.out.println(r1.getSpot(1,2));
-//        
-        
-//        initGame();
-//        showBoard();
-//        while(option == 0) {
-//            
-//        }
-//        if(option == 1) startGame();
-//        if(option == 2) help();
-//        if(option == 3) exitGame();
-//        int i ;
-//        i = firstMove(new Point(2,7));
-//        System.out.println(i);
-//        showBoard();
-//        i = secondMove(new Point(2,3));
-//        System.out.println(i);
-//        showBoard();
-//        
-//        Scanner in = new Scanner(System.in);
-//        while(!(endOfGame())) {
-//            showBoard();
-//            if(client == true) {
-//                System.out.println("Client Player Turn ");
-//                Point move = new Point(-1,-1);
-//                while(!(validMove(move))) {
-//                    System.out.println("Please enter your move (x y) ");
-//                    move.setLocation(in.nextInt(), in.nextInt());   
-//                }
-//                clientMoves(move);
-//                
-//            }
-//            else {
-//                System.out.println("Server Player Turn ");
-//                Point move = new Point(-1,-1);
-//                while(!(validMove(move))) {
-//                    System.out.println("Please enter your move (x y) ");
-//                    move.setLocation(in.nextInt(), in.nextInt());   
-//                }
-//                serverMoves(move);
-//                
-//            }
-//        }
-//        int winner = winner();
-//        if(winner == 1)
-//            System.out.println("Server won!");
-//        else 
-//            if(winner == 2)
-//                 System.out.println("Client won!");
-//            else
-//                System.out.println("Tie");
-        
-//        for(int i = 0; i < 17; i++)
-//            System.out.println(panels[i].toString());
-            
-
+        t.join();       
     }
     
 }
