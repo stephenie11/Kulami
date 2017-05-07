@@ -5,8 +5,6 @@
  */
 package kulami;
 
-import java.awt.Point;
-
 /**
  *
  * @author Stefania
