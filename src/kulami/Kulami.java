@@ -21,6 +21,11 @@ public class Kulami {
     private static final int MATRIXLENGTH = 8;
     private static final int PANELSNR = 17;
     
+    // Obtiunea pe care o alege userul ,vine de la interfata 1-start,2-help,3-exit 0-nu s a ales nimic
+    private static int option = 0;
+    private static int user = 0;
+    private static String userName;
+    
     // Al cui este randul de a muta
     private static boolean client = false;
     private static boolean server = true;
@@ -296,52 +301,152 @@ public class Kulami {
         return nrMoves;
     }
     
+   // Ce a fost in main inainte
+    public static void exMain() {
+        
+        
+        
+//        public static void main(String[] args) throws FileNotFoundException {
+//        
+//        initGame();
+//        showBoard();
+//        int i ;
+//        i = firstMove(new Point(2,7));
+//        System.out.println(i);
+//        showBoard();
+//        i = secondMove(new Point(2,3));
+//        System.out.println(i);
+//        showBoard();
+//        
+//        Scanner in = new Scanner(System.in);
+//        while(!(endOfGame())) {
+//            showBoard();
+//            if(client == true) {
+//                System.out.println("Client Player Turn ");
+//                Point move = new Point(-1,-1);
+//                while(!(validMove(move))) {
+//                    System.out.println("Please enter your move (x y) ");
+//                    move.setLocation(in.nextInt(), in.nextInt());   
+//                }
+//                clientMoves(move);
+//                
+//            }
+//            else {
+//                System.out.println("Server Player Turn ");
+//                Point move = new Point(-1,-1);
+//                while(!(validMove(move))) {
+//                    System.out.println("Please enter your move (x y) ");
+//                    move.setLocation(in.nextInt(), in.nextInt());   
+//                }
+//                serverMoves(move);
+//                
+//            }
+//        }
+//        int winner = winner();
+//        if(winner == 1)
+//            System.out.println("Server won!");
+//        else 
+//            if(winner == 2)
+//                 System.out.println("Client won!");
+//            else
+//                System.out.println("Tie");
+//                
+//        
+//        
+////        for(int i = 0; i < 17; i++)
+////            System.out.println(panels[i].toString());
+//            
+//
+//    }
+        
+    }
+    
+    public static void startGame() {
+        while(user == 0) {
+            
+        }
+        // userul este server
+        if(user == 1) {
+            userIsServer();
+        }
+        //userul este client
+        if(user == 2) {
+            userIsClient();
+        }
+        
+    }
+    public static void userIsServer() {
+        
+    }
+    public static void userIsClient() { 
+    
+    }
+    public static void help() {
+        
+    }
+    
+    public static void exitGame() {
+        
+    }
+    
     public static void main(String[] args) throws FileNotFoundException {
         
-        initGame();
-        showBoard();
-        int i ;
-        i = firstMove(new Point(2,7));
-        System.out.println(i);
-        showBoard();
-        i = secondMove(new Point(2,3));
-        System.out.println(i);
-        showBoard();
+        ResourceSingleton r = ResourceSingleton.getInstance();
+        System.out.println(r.getSpot(1,2));
+        r.getSpot(1, 2).setStatus(1);
         
-        Scanner in = new Scanner(System.in);
-        while(!(endOfGame())) {
-            showBoard();
-            if(client == true) {
-                System.out.println("Client Player Turn ");
-                Point move = new Point(-1,-1);
-                while(!(validMove(move))) {
-                    System.out.println("Please enter your move (x y) ");
-                    move.setLocation(in.nextInt(), in.nextInt());   
-                }
-                clientMoves(move);
-                
-            }
-            else {
-                System.out.println("Server Player Turn ");
-                Point move = new Point(-1,-1);
-                while(!(validMove(move))) {
-                    System.out.println("Please enter your move (x y) ");
-                    move.setLocation(in.nextInt(), in.nextInt());   
-                }
-                serverMoves(move);
-                
-            }
-        }
-        int winner = winner();
-        if(winner == 1)
-            System.out.println("Server won!");
-        else 
-            if(winner == 2)
-                 System.out.println("Client won!");
-            else
-                System.out.println("Tie");
-                
+        ResourceSingleton r1 = ResourceSingleton.getInstance();
+        System.out.println(r1.getSpot(1,2));
         
+        
+//        initGame();
+//        showBoard();
+//        while(option == 0) {
+//            
+//        }
+//        if(option == 1) startGame();
+//        if(option == 2) help();
+//        if(option == 3) exitGame();
+//        int i ;
+//        i = firstMove(new Point(2,7));
+//        System.out.println(i);
+//        showBoard();
+//        i = secondMove(new Point(2,3));
+//        System.out.println(i);
+//        showBoard();
+//        
+//        Scanner in = new Scanner(System.in);
+//        while(!(endOfGame())) {
+//            showBoard();
+//            if(client == true) {
+//                System.out.println("Client Player Turn ");
+//                Point move = new Point(-1,-1);
+//                while(!(validMove(move))) {
+//                    System.out.println("Please enter your move (x y) ");
+//                    move.setLocation(in.nextInt(), in.nextInt());   
+//                }
+//                clientMoves(move);
+//                
+//            }
+//            else {
+//                System.out.println("Server Player Turn ");
+//                Point move = new Point(-1,-1);
+//                while(!(validMove(move))) {
+//                    System.out.println("Please enter your move (x y) ");
+//                    move.setLocation(in.nextInt(), in.nextInt());   
+//                }
+//                serverMoves(move);
+//                
+//            }
+//        }
+//        int winner = winner();
+//        if(winner == 1)
+//            System.out.println("Server won!");
+//        else 
+//            if(winner == 2)
+//                 System.out.println("Client won!");
+//            else
+//                System.out.println("Tie");
         
 //        for(int i = 0; i < 17; i++)
 //            System.out.println(panels[i].toString());
