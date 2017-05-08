@@ -282,7 +282,10 @@ public class ClientMode implements Runnable {
                 out.writeObject(move);
                 
             }
-            
+            int winner = winner();
+            if(winner == 0) System.out.println("Tie");
+            if(winner == 1) System.out.println("You won!");
+            if(winner == 2) System.out.println("You lost!");
             
             echoSocket.close();
             in.close();
